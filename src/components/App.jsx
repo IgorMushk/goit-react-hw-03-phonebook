@@ -13,14 +13,29 @@ export class App extends Component {
 
   //console.log('clientList', this.state.contactList);
 
+  componentDidMount() {
+    const contactsFromLocalStor = JSON.parse(localStorage.getItem('contacts'));
+    //console.log('localStor', contactsFromLocalStor)
+    // if(contactsFromLocalStor !== null) {
+    //   this.setState({contactList: contactsFromLocalStor});
+    // }
+    contactsFromLocalStor && this.setState({contactList: contactsFromLocalStor})
+  }
+
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.contactList.length !== this.state.contactList.length) {
+localStorage.setItem('contacts', JSON.stringify(this.state.contactList))
+  }
+} 
+
   setStateContacts = dataContact => {
     // Checking input ccontact in contactList
     const checkContactList = this.state.contactList.some(
       contact => contact.name.toLowerCase() === dataContact.name.toLowerCase()
     );
     if (checkContactList) {
-      alert( `${dataContact.name} is already in contacts` );
-      return
+      alert(`${dataContact.name} is already in contacts`);
+      return;
     }
 
     this.setState(prevState => ({
@@ -68,4 +83,3 @@ export class App extends Component {
     );
   }
 }
-
